@@ -4,36 +4,40 @@ import GalleryItem from './GalleryItem'
 
 import axios from 'axios'
 
-const ImgurGallery = ({ searchTerm }) => {
+const MyGallery = ({ searchTerm, category }) => {
 
-    const [url, setUrl] = useState('https://api.imgur.com/3/gallery/search/');
+    const uploadsUrl = 'http://localhost:5000/uploads/';
+
+    const [url, setUrl] = useState('http://localhost:5000/api/images');
     const [photos, setPhotos] = useState([]);
 
     useEffect(() => {
-        getPhotos(url, searchTerm);
-    }, [searchTerm, url, setUrl])
+        getPhotos(url, searchTerm, category);
+    }, [searchTerm, category, url, setUrl])
 
-    const getPhotos = (url, searchTerm) => {
-        
-        let q = 'random';
+    const getPhotos = (url, searchTerm, category) => {
 
-        if(searchTerm !== ''){
-            q = searchTerm;
+        let imagesUrl = `${url}?query=${searchTerm}`;
+
+        if(category !== null){
+            imagesUrl += `&category=${category}`;
         }
         
-        axios.get(`${url}?q=${q}`, { headers: {'Authorization': 'Client-ID a0e285112494a96'}}
-        ).then((res) => {
-            setPhotos(res.data.data);
+        axios.get(imagesUrl)
+        .then((res) => {
+            setPhotos(res.data);
         }).catch((err) => {
             console.log(err);
         });
     }
 
+
+
   return (
       <GalleryGrid>
            {
-                photos?.filter(ph => ph.images && ph.images[0].type !== 'video/mp4').map(
-                    photo => <GalleryItem key={photo.id} src={photo.images[0].link} alt={photo.description} title={photo.title} />
+                photos?.map(
+                    photo => <GalleryItem key={photo.filename} src={uploadsUrl+photo.filename} alt={photo.title} title={photo.title} />
                 )
             }
       </GalleryGrid>
@@ -59,4 +63,4 @@ const GalleryGrid = styled.div`
     }
 `
 
-export default ImgurGallery
+export default MyGallery

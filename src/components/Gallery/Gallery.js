@@ -7,7 +7,7 @@ import Pagination from '../Pagination/Pagination'
 
 const Gallery = ({ searchTerm, perPage, pg }) => {
 
-    const [url, setUrl] = useState('https://api.pexels.com/v1/search');
+    const [url, setUrl] = useState('https://api.pexels.com/v1/');
     const [photos, setPhotos] = useState([]);
     const [page, setPage] = useState(pg);
     const [totalResults, setTotalResult] = useState(0);
@@ -17,7 +17,12 @@ const Gallery = ({ searchTerm, perPage, pg }) => {
     }, [searchTerm, pg, perPage, url, setUrl, setPage])
 
     const getPhotos = (url, searchTerm, perPage, page) => {
-        axios.get(`${url}?query=${searchTerm}&per_page=${perPage}&page=${page}`, { headers: {'Authorization': '563492ad6f9170000100000172e40c73ea194f8589f3de8585118b13'}}
+        let imagesUrl = `${url}/curated?per_page=${perPage}&page=${page}`;
+
+        if(searchTerm !== ''){
+            imagesUrl = `${url}/search?query=${searchTerm}&per_page=${perPage}&page=${page}`;
+        }
+        axios.get(imagesUrl, { headers: {'Authorization': '563492ad6f9170000100000172e40c73ea194f8589f3de8585118b13'}}
         ).then((res) => {
             setPage(res.data.page);
             setTotalResult(res.data.total_results);
@@ -54,6 +59,19 @@ const GalleryGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-gap: 15px;
+
+    @media screen and (max-width: 480px){
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media screen and (min-width: 481px) and (max-width: 768px){
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media screen and (min-width: 769px) and (max-width: 1024px){
+        grid-template-columns: repeat(4, 1fr);
+    }
+
 `
 
 export default Gallery

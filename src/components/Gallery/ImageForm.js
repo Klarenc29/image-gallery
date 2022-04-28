@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 
-import { Form, Button, Container } from 'react-bootstrap'
+import { Form, Button, Container, Alert } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 
 const ImageForm = () => {
@@ -15,6 +15,8 @@ const ImageForm = () => {
     const [category, setCategory] = useState(null);
     const [keywords, setKeywords] = useState('');
     const [image, setImage] = useState(null);
+
+    const[valid, setValid] = useState(true);
 
     let navigate = useNavigate();
 
@@ -33,7 +35,12 @@ const ImageForm = () => {
 
     const onFormSubmit = (e) => {
         e.preventDefault();
-        const newImage = new FormData();
+        if(title === '' || category === null || keywords === '' || image === null){
+            setValid(false);
+            return;
+        }else{
+            setValid(true);
+            const newImage = new FormData();
         newImage.append('title', title);
         newImage.append('category', category);
         newImage.append('keywords', keywords);
@@ -44,10 +51,14 @@ const ImageForm = () => {
             navigate('/my-gallery');
         })
         .catch((err) => console.log(err));
+        }
     }
 
   return (
     <Container>
+        {!valid && <Alert key='danger' variant='danger'>
+        Please fill out all the fields!
+        </Alert>}
         <Form onSubmit={onFormSubmit} encType="multipart/form-data">
             <Form.Group className="mb-3" controlId="title">
                 <Form.Label>Title</Form.Label>

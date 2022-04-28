@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { useLocation, Link, useNavigate } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import axios from 'axios';
 
 const Header = (props) => {
     const categoriesUrl = 'http://localhost:5000/api/categories';
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [perPage, setPerPage] = useState(15);
+    const [perPage, setPerPage] = useState(25);
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState('');
 
@@ -254,6 +254,7 @@ const SelectWrapper = styled.div`
     width: 25%;
     display: flex;
     align-items: center;
+    margin-right: 15px;
 
     @media screen and (max-width: 768px){
         width: 40%;

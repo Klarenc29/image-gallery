@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { Modal } from 'react-bootstrap'
 
 const GalleryItem = (props) => {
-    const [fullscreen, setFullScreen] = useState(false);
+    const [show, setShow] = useState(false);
 
-    const toggleFullscreen = () => {
-        setFullScreen(!fullscreen);
-    }
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
   return (
     <>
         <Wrapper>
-            <ImageWrapper onClick={toggleFullscreen}>
+            <ImageWrapper onClick={handleShow}>
                 <Image src={props.src} alt={props.alt} />
             </ImageWrapper>
             <Footer>
@@ -19,35 +19,14 @@ const GalleryItem = (props) => {
                 {props.title && <p>Title: <span>{props.title}</span></p>}
             </Footer>
         </Wrapper>
-        {fullscreen && 
-            <FullScreenImage style={{ backgroundImage: `url(${props.src})`}}>
-                <p onClick={toggleFullscreen}><i className="fa-solid fa-xmark"></i></p>
-            </FullScreenImage>
-        }
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Body>
+                <Image src={props.src} alt={props.alt} />
+            </Modal.Body>
+        </Modal>
     </>
   )
 }
-
-const FullScreenImage = styled.div`
-    background-size: cover;
-    background-position: top;
-    background-repeat: no-repeat;
-    min-height: 100%;
-    height: 300vh;
-    width: 100%;
-    z-index: 1000;
-    position: absolute;
-    top: 0;
-    left: 0;
-    cursor: pointer;
-
-    p{
-        color: #fff;
-        float: right;
-        margin: 20px;
-        font-size: 24px;
-    }
-`
 
 const Wrapper = styled.div`
     display: flex;

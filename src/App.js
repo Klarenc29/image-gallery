@@ -14,7 +14,7 @@ import Header from './components/Header/Header';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [perPage, setPerPage] = useState(15);
+  const [perPage, setPerPage] = useState(25);
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState(null);
 
